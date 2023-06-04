@@ -23,7 +23,7 @@
             <option value="ar-TN">Tunisian Arabic</option>
             <option value="ar-YE">Yemeni Arabic</option>
         </select><br>
-        <label for="secretkey">Secret Key:</label><br>
+        <label for="apikey">Secret Key:</label><br>
         <input type="text" id="apikey" name="apikey"><br>
         <input type="submit" value="Submit">
     </form>
@@ -38,7 +38,7 @@
             url: $('#url').val(),
             email: $('#email').val(),
             dialect: $('#dialect').val(),
-            secretkey: $('#secretkey').val()
+            apikey: $('#apikey').val()
         };
 
         $.ajax({
