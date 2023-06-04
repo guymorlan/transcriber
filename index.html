@@ -78,7 +78,7 @@
         <input type="text" id="apikey" name="apikey">
         <input type="submit" value="Submit">
     </form>
-
+    <div id="loading" style="display: none;">Processing... Please wait</div>
     <div id="response"></div>
 
     <script>
@@ -91,17 +91,24 @@
             dialect: $('#dialect').val(),
             apikey: $('#apikey').val()
         };
+        
+        $('#loading').show();
 
         $.ajax({
             type: 'POST',
             url: 'https://0xwttjlyvj.execute-api.us-east-1.amazonaws.com/Test',
             contentType: 'application/json',
+            timeout: 300000*5,
             data: JSON.stringify(form_data),
             success: function(data) {
+                
+                 $('#loading').hide();
+
                 // Display the response in the response div
                 $('#response').html(JSON.stringify(data));
             },
             error: function(error) {
+                 $('#loading').hide();
                 // Display the error in the response div
                 $('#response').html('An error occurred: ' + JSON.stringify(error));
             }
