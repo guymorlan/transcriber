@@ -53,6 +53,18 @@
             background-color: #f8f8f8;
             font-size: 16px;
         }
+        
+        #loading {
+            margin-top: 20px;
+            width: 300px;
+            margin: 20px auto;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f8f8f8;
+            font-size: 16px;
+        }
+        
     </style>
 </head>
 <body>
@@ -82,37 +94,45 @@
     <div id="response"></div>
 
     <script>
-    $("#myForm").submit(function(event) {
-        event.preventDefault();
+   $("#myForm").submit(function(event) {
+    event.preventDefault();
 
-        var form_data = {
-            url: $('#url').val(),
-            email: $('#email').val(),
-            dialect: $('#dialect').val(),
-            apikey: $('#apikey').val()
-        };
-        
-        $('#loading').show();
-        $.ajax({
-            type: 'POST',
-            url: 'https://0xwttjlyvj.execute-api.us-east-1.amazonaws.com/Test',
-            contentType: 'application/json',
-            timeout: 300000*5,
-            data: JSON.stringify(form_data),
-            success: function(data) {
-                
-                 $('#loading').hide();
+    var form_data = {
+        url: $('#url').val(),
+        email: $('#email').val(),
+        dialect: $('#dialect').val(),
+        apikey: $('#apikey').val()
+    };
+    
+    $('#loading').show();
+    $.ajax({
+        type: 'POST',
+        url: 'https://0xwttjlyvj.execute-api.us-east-1.amazonaws.com/Test',
+        contentType: 'application/json',
+        timeout: 300000*5,
+        data: JSON.stringify(form_data),
+        success: function(data) {
+            $('#loading').hide();
 
-                // Display the response in the response div
-                $('#response').html(JSON.stringify(data));
-            },
-            error: function(error) {
-                 $('#loading').hide();
-                // Display the error in the response div
-                $('#response').html('An error occurred: ' + JSON.stringify(error));
+            // If the returned data is a stringified JSON, parse it back to an object
+            if (typeof data === "string") {
+                data = JSON.parse(data);
             }
-        });
+
+            // Display the body and statusCode of the response in the response div
+            $('#response').html('Status Code: ' + data.statusCode + '<br>Body: ' + data.body);
+        },
+        error: function(error) {
+            $('#loading').hide();
+
+            // Display the error in the response div
+            // In case of an error, jQuery includes the HTTP status and the text status in the jqXHR object
+            // These can be accessed via error.status and error.statusText respectively
+            $('#response').html('An error occurred: ' + error.status + ' ' + error.statusText);
+        }
     });
+});
+
     </script>
 </body>
 </html>
