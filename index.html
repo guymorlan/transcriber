@@ -28,6 +28,8 @@
         <input type="submit" value="Submit">
     </form>
 
+    <div id="response"></div>
+
     <script>
     $("#myForm").submit(function(event) {
         event.preventDefault();
@@ -45,12 +47,12 @@
             contentType: 'application/json',
             data: JSON.stringify(form_data),
             success: function(data) {
-                // Do something with the response
-                console.log(data);
+                // Display the response in the response div
+                $('#response').html(JSON.stringify(data));
             },
             error: function(error) {
-                // Handle error
-                console.log(error);
+                // Display the error in the response div
+                $('#response').html('An error occurred: ' + JSON.stringify(error));
             }
         });
     });
