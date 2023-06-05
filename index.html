@@ -3,73 +3,72 @@
 <head>
     <title>Playaling Transcriber</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
 
-        
-        #myForm {
-            width: 300px;
-            margin: 0 auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background-color: #f8f8f8;
-        }
+    .myForm {
+        width: 300px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #f8f8f8;
+    }
 
-        #myForm label {
-            display: block;
-            margin-bottom: 5px;
-        }
+    .myForm label {
+        display: block;
+        margin-bottom: 5px;
+    }
 
-        #myForm input[type="text"], #myForm select {
-            width: 100%;
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            margin-bottom: 20px;
-        }
+    .myForm input[type="text"], .myForm select, .myForm input[type="file"] {
+        width: 100%;
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-bottom: 20px;
+    }
 
-        #myForm input[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+    .myForm input[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
 
-        #myForm input[type="submit"]:hover {
-            background-color: #45a049;
-        }
+    .myForm input[type="submit"]:hover {
+        background-color: #45a049;
+    }
 
-        #response {
-            margin-top: 20px;
-            width: 300px;
-            margin: 20px auto;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background-color: #f8f8f8;
-            font-size: 16px;
-        }
-        
-        #loading {
-            margin-top: 20px;
-            width: 300px;
-            margin: 20px auto;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background-color: #f8f8f8;
-            font-size: 16px;
-        }
-        
-    </style>
+    .response {
+        margin-top: 20px;
+        width: 300px;
+        margin: 20px auto;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #f8f8f8;
+        font-size: 16px;
+    }
+    
+    .loading {
+        margin-top: 20px;
+        width: 300px;
+        margin: 20px auto;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #f8f8f8;
+        font-size: 16px;
+    }
+    
+</style>
 </head>
 <body>
-    <form id="myForm">
+    <form id="myForm" class="myForm" >
         <label for="url">URL:</label>
         <input type="text" id="url" name="url">
         <label for="email">Email:</label>
@@ -91,8 +90,19 @@
         <input type="text" id="apikey" name="apikey">
         <input type="submit" value="Submit">
     </form>
-    <div id="loading" style="display: none;">Processing... Please wait</div>
-    <div id="response"></div>
+    <div id="loading"class="loading"  style="display: none;">Processing... Please wait</div>
+    <div id="response" class="response"></div>
+    
+    <form id="mySecondForm" class="myForm" enctype="multipart/form-data">
+    <label for="docxFile">DOCX File:</label>
+    <input type="file" id="docxFile" name="docxFile" accept=".docx">
+    <label for="email2">Email:</label>
+    <input type="text" id="email2" name="email2">
+    <input type="submit" value="Submit">
+</form>
+<div id="loading2" class="loading"  style="display: none;">Processing... Please wait</div>
+<div id="response2" class="response"></div>
+
 
     <script>
    $("#myForm").submit(function(event) {
@@ -130,6 +140,42 @@
             // In case of an error, jQuery includes the HTTP status and the text status in the jqXHR object
             // These can be accessed via error.status and error.statusText respectively
             $('#response').html('An error occurred: ' + error.status + ' ' + error.statusText);
+        }
+    });
+});
+
+        $("#mySecondForm").submit(function(event) {
+    event.preventDefault();
+
+    var formData = new FormData();
+    formData.append('docxFile', $('#docxFile')[0].files[0]);
+    formData.append('email', $('#email2').val());
+
+    $('#loading2').show();
+    $.ajax({
+        type: 'POST',
+        url: 'https://rvsnbrtpz7.execute-api.us-east-1.amazonaws.com/Test',
+        processData: false,
+        contentType: false,
+        data: formData,
+        success: function(data) {
+            $('#loading2').hide();
+
+            // If the returned data is a stringified JSON, parse it back to an object
+            if (typeof data === "string") {
+                data = JSON.parse(data);
+            }
+
+            // Display the body and statusCode of the response in the response div
+            $('#response2').html('Status Code: ' + data.statusCode + '<br>Body: ' + data.body);
+        },
+        error: function(error) {
+            $('#loading2').hide();
+
+            // Display the error in the response div
+            // In case of an error, jQuery includes the HTTP status and the text status in the jqXHR object
+            // These can be accessed via error.status and error.statusText respectively
+            $('#response2').html('An error occurred: ' + error.status + ' ' + error.statusText);
         }
     });
 });
