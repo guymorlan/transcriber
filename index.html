@@ -148,7 +148,7 @@
     event.preventDefault();
 
     var formData = new FormData();
-    formData.append('docxFile', $('#docxFile')[0].files[0]);
+    formData.append('body', $('#docxFile')[0].files[0]);
     formData.append('email', $('#email2').val());
 
     $('#loading2').show();
