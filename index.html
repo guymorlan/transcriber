@@ -9,7 +9,7 @@
     }
     
     .myForm {
-        width: 300px;
+        width: 350px;
         margin: 0 auto;
         padding: 20px;
         border: 1px solid #ccc;
@@ -145,14 +145,12 @@ var form_data = {
             // Display the body and statusCode of the response in the response div
             $('#response').html('Status Code: ' + data.statusCode + '<br>Body: ' + data.body);
         },
-        error: function(error) {
-            $('#loading').hide();
 
-            // Display the error in the response div
-            // In case of an error, jQuery includes the HTTP status and the text status in the jqXHR object
-            // These can be accessed via error.status and error.statusText respectively
-            $('#response').html('An error occurred: ' + error.status + ' ' + error.statusText);
-        }
+        error: function(error) {
+    $('#loading').hide();
+    $('#response').html('An error occurred: ' + JSON.stringify(error));
+}
+
     });
 });
 
