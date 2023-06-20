@@ -127,6 +127,8 @@ var form_data = {
     end: $('#end').val(),                     // Gets the value from the end input field.
 };
 
+       var timeoutId;
+
     $('#loading').show();
     $.ajax({
         type: 'POST',
@@ -135,23 +137,29 @@ var form_data = {
         timeout: 300000*5,
         data: JSON.stringify(form_data),
         success: function(data) {
+            clearTimeout(timeoutId); // Clear the timeout
             $('#loading').hide();
 
-            // If the returned data is a stringified JSON, parse it back to an object
             if (typeof data === "string") {
                 data = JSON.parse(data);
             }
 
-            // Display the body and statusCode of the response in the response div
             $('#response').html('Status Code: ' + data.statusCode + '<br>Body: ' + data.body);
         },
-
         error: function(error) {
-    $('#loading').hide();
-    $('#response').html('An error occurred: ' + JSON.stringify(error));
-}
+            clearTimeout(timeoutId); // Clear the timeout
+            $('#loading').hide();
 
+            $('#response').html('An error occurred: ' + error.status + ' ' + error.statusText);
+        }
     });
+
+    // Set timeout for 28 seconds
+    timeoutId = setTimeout(function() {
+        $('#loading').hide();
+        $('#response').html('Video successfully sent for processing, wait for email response');
+    }, 28000);
+    
 });
 
         $("#mySecondForm").submit(function(event) {
