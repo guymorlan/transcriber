@@ -69,6 +69,7 @@
 </head>
 <body>
     <form id="myForm" class="myForm" >
+            <h2>1. Transcribe</h2>
         <label for="url">URL:</label>
         <input type="text" id="url" name="url">
         <label for="email">Email:</label>
@@ -100,8 +101,10 @@
     </form>
     <div id="loading"class="loading"  style="display: none;">Processing... Please wait</div>
     <div id="response" class="response"></div>
-    
+
     <form id="mySecondForm" class="myForm" enctype="multipart/form-data">
+    <h2>2. Translate</h2>
+
     <label for="docxFile">DOCX File:</label>
     <input type="file" id="docxFile" name="docxFile" accept=".docx">
     <label for="email2">Email:</label>
@@ -113,6 +116,8 @@
 
 
         <form id="myThirdForm" class="myForm" enctype="multipart/form-data">
+        <h2>3. Create Aegisub File</h2>
+
     <label for="docxFile2">DOCX File:</label>
     <input type="file" id="docxFile2" name="docxFile2" accept=".docx">
     <label for="email3">Email:</label>
@@ -224,7 +229,7 @@ var form_data = {
     $('#loading3').show();
     $.ajax({
         type: 'POST',
-        url: 'https://e84dzd5we8.execute-api.us-east-1.amazonaws.com/test',
+        url: 'https://e84dzd5we8.execute-api.us-east-1.amazonaws.com/test/aegisub',
         processData: false,
         contentType: false,
         data: formData,
