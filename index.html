@@ -127,7 +127,8 @@ var form_data = {
     end: $('#end').val(),                     // Gets the value from the end input field.
 };
 
-       var timeoutId;
+    var timeoutId;
+    var timeoutReached = false;
 
     $('#loading').show();
     $.ajax({
@@ -138,6 +139,8 @@ var form_data = {
         data: JSON.stringify(form_data),
         success: function(data) {
             clearTimeout(timeoutId); // Clear the timeout
+            if(timeoutReached) return; // Do not proceed if timeout has been reached
+
             $('#loading').hide();
 
             if (typeof data === "string") {
@@ -148,6 +151,8 @@ var form_data = {
         },
         error: function(error) {
             clearTimeout(timeoutId); // Clear the timeout
+            if(timeoutReached) return; // Do not proceed if timeout has been reached
+
             $('#loading').hide();
 
             $('#response').html('An error occurred: ' + error.status + ' ' + error.statusText);
@@ -157,9 +162,9 @@ var form_data = {
     // Set timeout for 28 seconds
     timeoutId = setTimeout(function() {
         $('#loading').hide();
-        $('#response').html('Video successfully sent for processing, wait for email response');
+        $('#response').html('Form successfully sent, wait for email response');
+        timeoutReached = true; // Indicate that the timeout has been reached
     }, 28000);
-    
 });
 
         $("#mySecondForm").submit(function(event) {
